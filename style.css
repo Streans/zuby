@@ -1,1 +1,232 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* ===== Reset & základy ===== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --cervena: #C8102E;
+  --zluta: #FFD700;
+  --bila: #FFFFFF;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--cervena);
+  font-family: 'Anton', sans-serif;
+  color: var(--bila);
+  user-select: none;
+}
+
+/* ===== Odkaz zpět ===== */
+.zpet {
+  position: fixed;
+  top: 1rem;
+  left: 1.25rem;
+  color: var(--bila);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-family: sans-serif;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+.zpet:hover { opacity: 1; }
+
+/* ===== Scéna – grid ===== */
+.scena {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  height: 100vh;
+  padding: 6vh 3vw 7vh;
+  gap: 2vw;
+  overflow: visible;
+}
+
+/* ===== Levý sloupec: nápis + kartáček ===== */
+.levy {
+  grid-column: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  align-self: stretch;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+}
+
+/* Nápis ZUBY – každý znak je vlastní span pro animaci */
+.nadpis {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  font-family: 'Anton', sans-serif;
+  font-size: clamp(3rem, 17vh, 14rem);
+  line-height: 1.15;            /* větší rozestup mezi písmeny */
+  color: var(--bila);
+  letter-spacing: 0;
+  gap: 0.1em;
+}
+
+/* Slavnostní animace – každé písmeno samostatně */
+@keyframes pismeno-hop {
+  0%   { transform: translateX(0)   rotate(0deg)   scale(1);    }
+  20%  { transform: translateX(-6px) rotate(-5deg) scale(1.15); }
+  40%  { transform: translateX(6px)  rotate(4deg)  scale(1.1);  }
+  60%  { transform: translateX(-4px) rotate(-2deg) scale(1.05); }
+  80%  { transform: translateX(3px)  rotate(1deg)  scale(1.02); }
+  100% { transform: translateX(0)   rotate(0deg)   scale(1);    }
+}
+
+.nadpis.slavit span:nth-child(1) { animation: pismeno-hop 0.55s ease-in-out 0.00s both; }
+.nadpis.slavit span:nth-child(2) { animation: pismeno-hop 0.55s ease-in-out 0.12s both; }
+.nadpis.slavit span:nth-child(3) { animation: pismeno-hop 0.55s ease-in-out 0.24s both; }
+.nadpis.slavit span:nth-child(4) { animation: pismeno-hop 0.55s ease-in-out 0.36s both; }
+
+#kartacek {
+  height: clamp(14rem, 44vh, 34rem);
+  width: auto;
+  cursor: pointer;
+  transition: filter 0.2s;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+  flex-shrink: 0;
+}
+#kartacek:hover {
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)) brightness(1.05);
+}
+
+.kartacek-obal {
+  position: relative;
+  display: inline-flex;
+  align-items: flex-end;
+}
+
+.kartacek-hit {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* ===== Střed: zuby ===== */
+.stred {
+  grid-column: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Posun doprava kompenzuje šířku levého sloupce */
+  margin-left: -2vw;
+}
+
+.zuby-obal {
+  position: relative;
+  display: inline-block;
+}
+
+#zuby-img {
+  display: block;
+  width: clamp(22rem, 50vw, 52rem);   /* větší než dřív */
+  height: auto;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4));
+}
+
+#spina {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+/* ===== Pravý sloupec: pasta ===== */
+.pravy {
+  grid-column: 3;
+  display: flex;
+  align-items: flex-end;
+}
+
+#pasta {
+  width: clamp(13rem, 22vw, 21rem);
+  height: auto;
+  cursor: pointer;
+  transform: rotate(72deg);
+  transform-origin: center center;
+  transition: transform 0.3s, filter 0.2s;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+}
+#pasta:hover {
+  transform: rotate(67deg) scale(1.06);
+}
+#pasta.ma-pastu {
+  filter: drop-shadow(0 0 10px var(--zluta)) drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+}
+
+/* ===== Plovoucí kartáček ===== */
+#kartacek-kurzor {
+  position: fixed;
+  top: 0; left: 0;
+  height: clamp(14rem, 44vh, 34rem);
+  width: auto;
+  pointer-events: none;
+  display: none;
+  z-index: 100;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+}
+
+body.drzi-kartacek               { cursor: none; }
+body.drzi-kartacek #kartacek     { opacity: 0.2; pointer-events: none; }
+body.drzi-kartacek #kartacek-kurzor { display: block; }
+
+/* ===== Proužek pasty ===== */
+#prouzek-pasty {
+  position: fixed;
+  display: none;
+  pointer-events: none;
+  z-index: 101;
+  width: 1.2rem;
+  height: 0.45rem;
+  background: linear-gradient(90deg, #fff 60%, #a8e6ff 100%);
+  border-radius: 3px;
+  box-shadow: 0 0 6px rgba(255,255,255,0.8);
+}
+body.drzi-kartacek #prouzek-pasty { display: block; }
+
+/* ===== Footer ===== */
+footer {
+  position: fixed;
+  bottom: 0.8rem;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-family: sans-serif;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.6);
+  z-index: 10;
+}
+
+/* ===== Responzivní – mobil ===== */
+@media (max-width: 640px) {
+  html, body { overflow-y: auto; }
+
+  .scena {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    min-height: 100vh;
+    padding: 5rem 1rem 4rem;
+    gap: 2rem;
+  }
+
+  .levy { flex-direction: column; align-items: center; }
+
+  .nadpis { font-size: clamp(4rem, 26vw, 9rem); }
+
+  #kartacek, #kartacek-kurzor { height: clamp(7rem, 24vw, 12rem); }
+
+  #zuby-img { width: min(90vw, 26rem); }
+
+  #pasta { width: clamp(7rem, 22vw, 11rem); }
+}

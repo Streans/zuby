@@ -4,9 +4,51 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ZUBY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- Odkaz zpět na portfolio -->
+  <a class="zpet" href="../">← zpět na portfolio</a>
+
+  <!-- Hlavní scéna -->
+  <div class="scena">
+
+    <!-- Levý sloupec: nápis + kartáček -->
+    <div class="levy">
+      <span class="nadpis"><span>Z</span><span>U</span><span>B</span><span>Y</span></span>
+      <div class="kartacek-obal">
+        <img id="kartacek" src="img/kartacek.webp" alt="kartáček na zuby" draggable="false">
+        <div class="kartacek-hit" id="kartacek-hit"></div>
+      </div>
+    </div>
+
+    <!-- Střed: zuby + canvas se špínou -->
+    <div class="stred">
+      <div class="zuby-obal">
+        <img id="zuby-img" src="img/zuby.webp" alt="zuby" draggable="false">
+        <!-- Canvas pro špínu – překryje obrázek zubů -->
+        <canvas id="spina"></canvas>
+      </div>
+    </div>
+
+    <!-- Pravý sloupec: pasta -->
+    <div class="pravy">
+      <img id="pasta" src="img/pasta.webp" alt="zubní pasta" draggable="false">
+    </div>
+
+  </div>
+
+  <!-- Kartáček sledující myš (klon, pohybuje se volně po stránce) -->
+  <img id="kartacek-kurzor" src="img/kartacek.webp" alt="" draggable="false" aria-hidden="true">
+
+  <!-- Spodní kontakt -->
+  <footer>
+    <span>kontakt: vas@email.cz</span>
+  </footer>
 
   <script src="main.js"></script>
 </body>
